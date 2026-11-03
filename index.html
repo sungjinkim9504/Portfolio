@@ -6,6 +6,9 @@
   <title>김성진 포트폴리오</title>
   <meta name="description" content="모바일 앱 개발자 지망생 김성진의 포트폴리오 — 팀 프로젝트 잼박스(JamBox) 앱 전담" />
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&family=JetBrains+Mono:wght@500;700&display=swap" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -25,9 +28,35 @@
   <main id="top">
     <!-- 첫 화면 -->
     <section class="hero">
+      <!-- 붓 자국 장식: 먹 번짐 + 비취색 붓질 + 가는 금선 -->
+      <svg class="hero__ink" viewBox="0 0 760 520" aria-hidden="true">
+        <defs>
+          <linearGradient id="ink-jade" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0" stop-color="#12897a" stop-opacity="0" />
+            <stop offset=".35" stop-color="#12897a" stop-opacity=".75" />
+            <stop offset=".8" stop-color="#3f9b5e" stop-opacity=".55" />
+            <stop offset="1" stop-color="#3f9b5e" stop-opacity="0" />
+          </linearGradient>
+          <linearGradient id="ink-gray" x1="0" y1="1" x2="1" y2="0">
+            <stop offset="0" stop-color="#5d6463" stop-opacity="0" />
+            <stop offset=".55" stop-color="#5d6463" stop-opacity=".2" />
+            <stop offset="1" stop-color="#5d6463" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        <path d="M120 470 C 300 360, 470 250, 740 40" stroke="url(#ink-gray)" stroke-width="90" fill="none" />
+        <path d="M200 430 C 360 330, 520 230, 720 120" stroke="url(#ink-jade)" stroke-width="22" fill="none" stroke-linecap="round" />
+        <path d="M260 452 C 420 352, 560 262, 700 186" stroke="url(#ink-jade)" stroke-width="7" fill="none" stroke-linecap="round" />
+        <path d="M300 380 L 690 150" stroke="#c9a227" stroke-width="1.4" fill="none" />
+        <path d="M640 64 l 0 120 M 634 64 l 12 0" stroke="#c9a227" stroke-width="1" fill="none" opacity=".8" />
+        <rect x="560" y="300" width="70" height="3" fill="#16191a" opacity=".55" />
+        <rect x="560" y="310" width="34" height="3" fill="#16191a" opacity=".3" />
+      </svg>
       <div class="wrap">
-        <p class="hero__eyebrow">모바일 앱 개발 포트폴리오</p>
-        <h1 class="hero__title">쓰는 사람이 편한 앱을<br />만드는 <mark>김성진</mark>입니다</h1>
+        <p class="hero__eyebrow code">Portfolio // Mobile App Dev</p>
+        <div class="hero__head">
+          <h1 class="hero__title">쓰는 사람이 편한 앱을<br />만드는 <mark>김성진</mark>입니다</h1>
+          <span class="seal" aria-hidden="true">성진</span>
+        </div>
         <p class="hero__lead">
           기획부터 화면, 서버 연동, 배포까지 직접 해보며 배우고 있습니다.
           팀 프로젝트 잼박스에서 모바일 앱을 전담해, 웹과 같은 기능을 앱으로 옮기고 안드로이드 배포 파일까지 만들었습니다.
@@ -41,9 +70,9 @@
           <!-- <a class="btn" href="files/portfolio.pdf" download>PDF 받기</a> -->
         </div>
         <dl class="stats">
-          <div><dt>잼박스 커밋</dt><dd>42개</dd></div>
-          <div><dt>만든 앱 기능</dt><dd>11가지</dd></div>
-          <div><dt>들은 수업</dt><dd>16과목</dd></div>
+          <div><dt>잼박스 커밋</dt><dd>42<small>개</small></dd></div>
+          <div><dt>만든 앱 기능</dt><dd>11<small>가지</small></dd></div>
+          <div><dt>들은 수업</dt><dd>16<small>과목</small></dd></div>
         </dl>
       </div>
     </section>
@@ -51,35 +80,42 @@
     <!-- 기술 스택 -->
     <section class="section" id="skills">
       <div class="wrap">
+        <p class="section__eyebrow code">01 / Skills</p>
         <h2 class="section__title">기술 스택</h2>
         <p class="section__lead">수업에서 배운 내용을 분야별로 묶고, 잼박스에서 실제로 써 본 기술을 함께 적었습니다.</p>
         <div class="skills">
-          <article class="skill">
+          <article class="skill card">
+            <p class="skill__no code">S-01</p>
             <h3>기획 · UI/UX</h3>
             <p class="skill__courses">앱 분석과 기획(UI/UX 개선), 모바일 UI/UX 개선</p>
             <ul class="tags"><li>모바일 화면 리디자인</li><li>하단 탭 구성</li><li>팁 팝업 개선</li></ul>
           </article>
-          <article class="skill">
+          <article class="skill card">
+            <p class="skill__no code">S-02</p>
             <h3>웹 화면</h3>
             <p class="skill__courses">HTML/CSS, 자바스크립트 기초</p>
             <ul class="tags"><li>Blazor 화면</li><li>CSS</li><li>네이버 지도 JS 연동</li></ul>
           </article>
-          <article class="skill">
+          <article class="skill card">
+            <p class="skill__no code">S-03</p>
             <h3>프로그래밍</h3>
             <p class="skill__courses">C, JAVA, 파이썬, PHP 기초</p>
             <ul class="tags"><li>C# / .NET 10</li><li>객체지향</li></ul>
           </article>
-          <article class="skill">
+          <article class="skill card">
+            <p class="skill__no code">S-04</p>
             <h3>서버 · 데이터</h3>
             <p class="skill__courses">데이터베이스 기초, 스프링 기초, 빅데이터분석 기초</p>
             <ul class="tags"><li>ASP.NET Core API</li><li>Supabase · PostgreSQL</li><li>공공데이터 API</li></ul>
           </article>
-          <article class="skill">
+          <article class="skill card">
+            <p class="skill__no code">S-05</p>
             <h3>시스템 · 클라우드</h3>
             <p class="skill__courses">컴퓨터이해, 리눅스 기초, 라즈베리파이 기초, 클라우드(AWS) 기초</p>
             <ul class="tags"><li>AWS RDS · S3</li><li>Git 협업</li><li>안드로이드 빌드</li></ul>
           </article>
-          <article class="skill">
+          <article class="skill card">
+            <p class="skill__no code">S-06</p>
             <h3>문서 · 발표</h3>
             <p class="skill__courses">정보처리(엑셀, 파워포인트)</p>
             <ul class="tags"><li>주간 보고서</li><li>발표 · 시연 자료</li></ul>
@@ -91,14 +127,14 @@
     <!-- 대표 프로젝트 -->
     <section class="section section--tint" id="project">
       <div class="wrap">
-        <p class="section__eyebrow">대표 프로젝트</p>
+        <p class="section__eyebrow code">02 / Project</p>
         <h2 class="section__title">잼박스 (JamBox)</h2>
         <p class="section__lead">
           열면 바로 놀 거리를 추천하고, 친구와 갈 곳을 정하고, 놀이 기록을 모으는 앱입니다.
           팀 뇌파민(Neuromin)에서 모바일 앱을 전담해 2026년 9월 15일부터 11월 2일까지 커밋 42개를 올렸습니다.
         </p>
 
-        <dl class="facts">
+        <dl class="facts card">
           <div><dt>내 역할</dt><dd>안드로이드·윈도우 앱 화면과 기능 구현, 웹 기능을 앱으로 이식, 배포 파일(APK·AAB) 관리</dd></div>
           <div><dt>팀</dt><dd>문학철(팀장, 웹·서버), 김성진(앱)</dd></div>
           <div><dt>기간</dt><dd>2026년 9월 ~ 11월</dd></div>
@@ -116,8 +152,8 @@
         </div>
         -->
 
-        <h3 class="sub">구조</h3>
-        <figure class="diagram">
+        <h3 class="sub"><span class="code">2.1</span>구조</h3>
+        <figure class="diagram card">
           <svg viewBox="0 0 760 392" role="img" aria-label="앱과 웹은 같은 API를 거쳐 데이터와 외부 서비스를 씁니다">
             <defs>
               <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -172,7 +208,7 @@
           <figcaption>앱과 웹은 같은 API를 쓰고, 외부 서비스 키는 API 서버에만 둡니다. 저는 왼쪽 위의 앱을 맡았습니다.</figcaption>
         </figure>
 
-        <h3 class="sub">내가 만든 기능</h3>
+        <h3 class="sub"><span class="code">2.2</span>내가 만든 기능</h3>
         <ol class="timeline">
           <li><time datetime="2026-10-26">10.26</time><div><strong>오늘 뭐하지? · 같이 정하기 · 축제 도장판</strong><p>랜덤 코스 뽑기, 로그인 없이 투표 링크 공유, GPS로 축제 도장 찍기</p></div></li>
           <li><time datetime="2026-10-20">10.20</time><div><strong>팁 "하루 동안 보지 않기"</strong><p>화면마다 뜨는 팁을 하루 동안 숨기는 선택지</p></div></li>
@@ -187,29 +223,34 @@
           <li><time datetime="2026-09-15">09.15</time><div><strong>첫 화면 · 디자인</strong><p>오늘의 재미 · 둘러보기 화면, 노란 브랜드 테마</p></div></li>
         </ol>
 
-        <h3 class="sub">문제 해결 사례</h3>
+        <h3 class="sub"><span class="code">2.3</span>문제 해결 사례</h3>
         <div class="cases">
-          <article class="case">
+          <article class="case card">
+            <p class="case__no code">Case 01</p>
             <h4>팁이 화면을 옮길 때마다 떠서 불편함</h4>
             <p><span>원인</span>자동으로 열리는 팁을 끌 방법이 없었음</p>
             <p><span>해결</span>"하루 동안 보지 않기" 체크박스를 만들고 기기에 저장</p>
           </article>
-          <article class="case">
+          <article class="case card">
+            <p class="case__no code">Case 02</p>
             <h4>팀장의 로그인 API 변경 후 앱 빌드가 깨짐</h4>
             <p><span>원인</span>내 정보 조회가 로그인 토큰으로 본인을 확인하는 방식으로 바뀜</p>
             <p><span>해결</span>모든 호출 부분을 토큰 방식으로 고치고, SNS 가입 대기 흐름을 추가</p>
           </article>
-          <article class="case">
+          <article class="case card">
+            <p class="case__no code">Case 03</p>
             <h4>웹 지도에 추천 장소가 안 보임</h4>
             <p><span>원인</span>네이버 지도는 등록한 주소(포트 5080)에서만 인증됨</p>
             <p><span>해결</span>실행 포트를 5080으로 맞춤</p>
           </article>
-          <article class="case">
+          <article class="case card">
+            <p class="case__no code">Case 04</p>
             <h4>로그인과 데이터가 전부 안 됨</h4>
             <p><span>원인</span>Supabase 무료 플랜 프로젝트가 일시 정지됨</p>
             <p><span>해결</span>도메인 조회로 원인을 찾고 팀장에게 복구를 요청한 뒤 API를 다시 점검</p>
           </article>
-          <article class="case">
+          <article class="case card">
+            <p class="case__no code">Case 05</p>
             <h4>윈도우용 앱이 실행되지 않음</h4>
             <p><span>원인</span>화면 주소 목록(Routes) 형식을 찾지 못함</p>
             <p><span>해결</span>참조 설정을 고쳐 윈도우에서도 실행되게 함</p>
@@ -221,6 +262,7 @@
     <!-- 수업별 학습 내용 -->
     <section class="section" id="courses">
       <div class="wrap">
+        <p class="section__eyebrow code">03 / Courses</p>
         <h2 class="section__title">수업별 학습 내용</h2>
         <p class="section__lead">과목마다 배운 내용과 잼박스에서 이어진 부분을 정리했습니다.</p>
         <div class="filters" role="group" aria-label="분야별 보기">
@@ -234,22 +276,22 @@
         </div>
         <!-- 결과물이 있는 과목은 <p class="course__link">에 내용을 적어 넣으세요 -->
         <ul class="courses">
-          <li class="course" data-area="ux"><h3>앱 분석과 기획(UI/UX 개선)</h3><p>기존 앱 분석, 불편한 점 찾기, 개선안 기획</p><p class="course__link">잼박스 팁 팝업 개선</p></li>
-          <li class="course" data-area="ux"><h3>모바일 UI/UX 개선(기초)</h3><p>모바일 화면 배치, 터치 대상 크기, 하단 탭 구성</p><p class="course__link">앱 하단 탭 5개 · 모바일형 리디자인</p></li>
-          <li class="course" data-area="web"><h3>HTML/CSS</h3><p>페이지 구조, 선택자, 레이아웃(flex), 반응형</p><p class="course__link">앱 화면 스타일 작업 전반 · 이 사이트</p></li>
-          <li class="course" data-area="web"><h3>자바스크립트 기초</h3><p>변수 · 함수 · 이벤트, DOM 다루기</p><p class="course__link">지도 표시 · 위치 선택 스크립트</p></li>
-          <li class="course" data-area="lang"><h3>C 프로그래밍 기초</h3><p>자료형, 조건문 · 반복문, 배열, 함수, 포인터</p></li>
-          <li class="course" data-area="lang"><h3>JAVA 프로그래밍 기초</h3><p>클래스 · 객체, 상속, 인터페이스</p><p class="course__link">C# 코드 작성의 바탕</p></li>
-          <li class="course" data-area="lang"><h3>파이썬 기초</h3><p>기본 문법, 리스트 · 딕셔너리, 파일 다루기</p></li>
-          <li class="course" data-area="lang"><h3>PHP 기초</h3><p>서버에서 페이지 만들기, 폼 처리, DB 연동</p></li>
-          <li class="course" data-area="data"><h3>데이터베이스 기초</h3><p>테이블 설계, SQL(SELECT · INSERT · JOIN)</p><p class="course__link">잼박스 일지 · 투표 · 도장 테이블 사용</p></li>
-          <li class="course" data-area="data"><h3>스프링 기초</h3><p>컨트롤러, REST API, 서버 구조</p><p class="course__link">잼박스 API(ASP.NET Core)와 같은 역할</p></li>
-          <li class="course" data-area="data"><h3>빅데이터분석 기초</h3><p>데이터 수집 · 정제 · 시각화</p><p class="course__link">공공데이터 축제 정보 활용</p></li>
-          <li class="course" data-area="sys"><h3>클라우드(AWS) 기초</h3><p>EC2 · S3 · RDS 같은 기본 서비스</p><p class="course__link">잼박스 데이터 DB(RDS) · 사진 저장(S3)</p></li>
-          <li class="course" data-area="sys"><h3>리눅스 기초</h3><p>터미널 명령어, 파일 · 권한</p><p class="course__link">Git · 빌드 명령어 사용</p></li>
-          <li class="course" data-area="sys"><h3>라즈베리파이 기초</h3><p>보드 설정, 센서 · LED 제어</p></li>
-          <li class="course" data-area="sys"><h3>컴퓨터이해</h3><p>인터넷 동작 원리, 논리연산</p><p class="course__link">포트 · 도메인 문제를 찾을 때 활용</p></li>
-          <li class="course" data-area="doc"><h3>정보처리(엑셀, 파워포인트)</h3><p>함수 · 표 정리, 발표 자료 만들기</p><p class="course__link">잼박스 발표 자료</p></li>
+          <li class="course card" data-area="ux"><h3>앱 분석과 기획(UI/UX 개선)</h3><p>기존 앱 분석, 불편한 점 찾기, 개선안 기획</p><p class="course__link">잼박스 팁 팝업 개선</p></li>
+          <li class="course card" data-area="ux"><h3>모바일 UI/UX 개선(기초)</h3><p>모바일 화면 배치, 터치 대상 크기, 하단 탭 구성</p><p class="course__link">앱 하단 탭 5개 · 모바일형 리디자인</p></li>
+          <li class="course card" data-area="web"><h3>HTML/CSS</h3><p>페이지 구조, 선택자, 레이아웃(flex), 반응형</p><p class="course__link">앱 화면 스타일 작업 전반 · 이 사이트</p></li>
+          <li class="course card" data-area="web"><h3>자바스크립트 기초</h3><p>변수 · 함수 · 이벤트, DOM 다루기</p><p class="course__link">지도 표시 · 위치 선택 스크립트</p></li>
+          <li class="course card" data-area="lang"><h3>C 프로그래밍 기초</h3><p>자료형, 조건문 · 반복문, 배열, 함수, 포인터</p></li>
+          <li class="course card" data-area="lang"><h3>JAVA 프로그래밍 기초</h3><p>클래스 · 객체, 상속, 인터페이스</p><p class="course__link">C# 코드 작성의 바탕</p></li>
+          <li class="course card" data-area="lang"><h3>파이썬 기초</h3><p>기본 문법, 리스트 · 딕셔너리, 파일 다루기</p></li>
+          <li class="course card" data-area="lang"><h3>PHP 기초</h3><p>서버에서 페이지 만들기, 폼 처리, DB 연동</p></li>
+          <li class="course card" data-area="data"><h3>데이터베이스 기초</h3><p>테이블 설계, SQL(SELECT · INSERT · JOIN)</p><p class="course__link">잼박스 일지 · 투표 · 도장 테이블 사용</p></li>
+          <li class="course card" data-area="data"><h3>스프링 기초</h3><p>컨트롤러, REST API, 서버 구조</p><p class="course__link">잼박스 API(ASP.NET Core)와 같은 역할</p></li>
+          <li class="course card" data-area="data"><h3>빅데이터분석 기초</h3><p>데이터 수집 · 정제 · 시각화</p><p class="course__link">공공데이터 축제 정보 활용</p></li>
+          <li class="course card" data-area="sys"><h3>클라우드(AWS) 기초</h3><p>EC2 · S3 · RDS 같은 기본 서비스</p><p class="course__link">잼박스 데이터 DB(RDS) · 사진 저장(S3)</p></li>
+          <li class="course card" data-area="sys"><h3>리눅스 기초</h3><p>터미널 명령어, 파일 · 권한</p><p class="course__link">Git · 빌드 명령어 사용</p></li>
+          <li class="course card" data-area="sys"><h3>라즈베리파이 기초</h3><p>보드 설정, 센서 · LED 제어</p></li>
+          <li class="course card" data-area="sys"><h3>컴퓨터이해</h3><p>인터넷 동작 원리, 논리연산</p><p class="course__link">포트 · 도메인 문제를 찾을 때 활용</p></li>
+          <li class="course card" data-area="doc"><h3>정보처리(엑셀, 파워포인트)</h3><p>함수 · 표 정리, 발표 자료 만들기</p><p class="course__link">잼박스 발표 자료</p></li>
         </ul>
       </div>
     </section>
@@ -257,12 +299,13 @@
     <!-- 배운 점 -->
     <section class="section section--tint" id="growth">
       <div class="wrap">
+        <p class="section__eyebrow code">04 / Growth</p>
         <h2 class="section__title">배운 점</h2>
         <p class="section__lead">수업에서 따로 배운 기술을 잼박스에서 한 서비스로 엮어 보면서, 화면 · 서버 · 데이터가 어떻게 이어지는지 알게 됐습니다.</p>
         <div class="growth">
-          <article><h3>협업</h3><p>웹과 앱을 나눠 맡고, 공용 코드를 바꿀 때는 먼저 알리는 방식으로 충돌을 줄였습니다.</p></article>
-          <article><h3>사용자 관점</h3><p>직접 써보며 불편한 점을 찾고 고치는 것이 UI/UX 수업에서 배운 내용과 같다는 것을 느꼈습니다.</p></article>
-          <article><h3>문제 해결</h3><p>오류가 나면 추측보다 원인을 하나씩 확인하는 습관을 들였습니다.</p></article>
+          <article class="card"><h3>협업</h3><p>웹과 앱을 나눠 맡고, 공용 코드를 바꿀 때는 먼저 알리는 방식으로 충돌을 줄였습니다.</p></article>
+          <article class="card"><h3>사용자 관점</h3><p>직접 써보며 불편한 점을 찾고 고치는 것이 UI/UX 수업에서 배운 내용과 같다는 것을 느꼈습니다.</p></article>
+          <article class="card"><h3>문제 해결</h3><p>오류가 나면 추측보다 원인을 하나씩 확인하는 습관을 들였습니다.</p></article>
         </div>
         <!-- 앞으로의 목표가 정해지면 아래 주석을 풀고 채우세요 -->
         <!-- <p class="goal"><strong>앞으로의 목표</strong> 여기에 목표를 적으세요</p> -->
@@ -272,12 +315,13 @@
 
   <footer class="footer" id="contact">
     <div class="wrap">
+      <p class="section__eyebrow code">05 / Contact</p>
       <h2 class="footer__title">연락처</h2>
       <ul class="contact">
         <li><span>이메일</span><a href="mailto:lonskim9504@gmail.com">lonskim9504@gmail.com</a></li>
         <li><span>GitHub</span><a href="https://github.com/sungjinkim9504" target="_blank" rel="noopener">github.com/sungjinkim9504</a></li>
       </ul>
-      <p class="footer__note">© 2026 김성진</p>
+      <p class="footer__note code">© 2026 Kim Sung Jin</p>
     </div>
   </footer>
 
