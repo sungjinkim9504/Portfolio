@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>잼박스 Case Study · 김성진</title>
+  <meta name="description" content="잼박스(JamBox) 모바일 앱 Case Study — 문제, 내 역할, 구조, DB, API, 기술 결정, 트러블슈팅, 테스트·배포, 회고" />
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700&family=JetBrains+Mono:wght@500;700&display=swap" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 바로가기</a>
+
+  <header class="topbar">
+    <div class="wrap topbar__inner">
+      <a class="topbar__logo" href="index.html">김성진</a>
+      <nav class="topbar__nav" aria-label="주 메뉴">
+        <a href="index.html#projects">프로젝트</a>
+        <a href="jambox.html" aria-current="page">Case Study</a>
+        <a href="index.html#skills">기술</a>
+        <a href="index.html#about">소개</a>
+        <a href="#contact">연락처</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="case-hero">
+      <div class="wrap">
+        <p class="hero__eyebrow code">Case Study // JamBox Mobile App</p>
+        <h1 class="hero__title">잼박스 앱: 웹 기능을<br />휴대폰에서 <mark>쓰이게</mark> 만들기</h1>
+        <p class="hero__lead">팀 뇌파민의 놀거리 서비스 잼박스에서 모바일 앱을 전담했습니다. 이 페이지는 무엇이 문제였고, 무엇을 왜 선택했고, 어떻게 확인했는지를 순서대로 정리한 기록입니다.</p>
+        <ol class="toc" aria-label="이 페이지 목차">
+          <li><a href="#overview"><span>01</span>개요</a></li>
+          <li><a href="#role"><span>02</span>내 역할</a></li>
+          <li><a href="#architecture"><span>03</span>구조</a></li>
+          <li><a href="#database"><span>04</span>DB</a></li>
+          <li><a href="#api"><span>05</span>API</a></li>
+          <li><a href="#decisions"><span>06</span>기술 결정</a></li>
+          <li><a href="#troubleshooting"><span>07</span>트러블슈팅</a></li>
+          <li><a href="#deploy"><span>08</span>테스트·배포</a></li>
+          <li><a href="#retro"><span>09</span>회고</a></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 01 OVERVIEW -->
+    <section class="case-section" id="overview">
+      <div class="wrap">
+        <p class="section__eyebrow code">01 / Overview</p>
+        <h2 class="section__title">개요</h2>
+        <div class="prose">
+          <p><b>문제</b> — 놀 거리를 찾을 때 장소 검색, 친구와 일정 맞추기, 다녀온 기록이 여러 앱에 흩어져 있다.</p>
+          <p><b>목표</b> — 열면 바로 주변 놀 거리를 추천하고, 친구와 투표로 갈 곳을 정하고, 놀이 기록과 축제 도장을 모으는 서비스를 웹과 앱에서 똑같이 제공한다.</p>
+        </div>
+        <div class="table-wrap" style="margin-top:20px">
+          <table class="table">
+            <tbody>
+              <tr><td>팀</td><td>뇌파민(Neuromin) 3명 — 팀장 문학철(웹·서버), 김성진(앱)</td></tr>
+              <tr><td>기간</td><td>2026.09.15 ~ 2026.11.16 (내 첫 커밋 ~ v0.9.2)</td></tr>
+              <tr><td>버전</td><td>v0.7.0 → v0.8.0(내 앱 작업이 main에 병합) → v0.9.0·v0.9.1(팀장: 실제 휴대폰용 빌드·AWS 배포) → v0.9.2(나: 수정 요청 반영)</td></tr>
+              <tr><td>주요 기능</td><td>장소 추천 지도, 오늘 뭐하지? 코스 뽑기, 같이 정하기 투표, 축제(공공데이터) · 축제 도장판, 놀이 일지, AI 화면 팁, 성인 확인</td></tr>
+              <tr><td>링크</td><td><a class="link" href="https://github.com/MoonHakCheol/Neuromin-Jambox" target="_blank" rel="noopener">GitHub 저장소 ↗</a> · <a class="link" href="https://3-34-126-158.sslip.io" target="_blank" rel="noopener">배포된 웹 ↗</a> · 내 브랜치 <code>dev/kimsungjin</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 MY ROLE -->
+    <section class="case-section" id="role">
+      <div class="wrap">
+        <p class="section__eyebrow code">02 / My Role</p>
+        <h2 class="section__title">내 역할 — 팀이 한 일과 내가 한 일</h2>
+        <p class="section__lead">팀 성과를 내 성과로 적지 않도록, 담당 범위를 나눠 적었습니다.</p>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>영역</th><th>팀(주로 팀장)</th><th>나</th></tr></thead>
+            <tbody>
+              <tr><td>화면</td><td>웹(Blazor Web App) 화면과 디자인</td><td>앱 화면 전체 — 웹 기능을 앱으로 옮기고 휴대폰에 맞게 배치</td></tr>
+              <tr><td>기기 기능</td><td>—</td><td>GPS 위치, 카메라 촬영, 보안 저장소, 공유 시트, 안드로이드 뒤로가기</td></tr>
+              <tr><td>서버·DB</td><td>API·DB 설계와 구현, AWS 배포</td><td>앱의 API 연동, 앱 버전 확인 API 추가, 인증 방식 변경에 맞춘 앱 수정</td></tr>
+              <tr><td>배포</td><td>웹 배포(EC2), 릴리스 관리</td><td>앱 Release APK·AAB 빌드, 버전 규칙</td></tr>
+              <tr><td>문서</td><td>요구사항·아키텍처·API 명세</td><td>학교 AWS 계정 설정 순서(docs/09-2), 앱 관련 API 명세 보완</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub"><span class="code">2.1</span>내가 만든 앱 기능</h3>
+        <ol class="timeline">
+          <li><time datetime="2026-11-16">11.16</time><div><strong>팀원 수정 요청 반영 (v0.9.2)</strong><p>팁은 버튼을 눌러야 열림, 안드로이드 뒤로가기, 목록 끌어 올리기, 업데이트 안내 팝업, 앱 버전 표시, 앱 이름 Jambox</p></div></li>
+          <li><time datetime="2026-11-09">11.09</time><div><strong>학교 AWS 계정 설정 문서</strong><p>접근 키를 쓸 수 없는 조건에 맞춘 콘솔 순서 정리</p></div></li>
+          <li><time datetime="2026-10-26">10.26</time><div><strong>오늘 뭐하지? · 같이 정하기 · 축제 도장판</strong><p>코스 뽑기, 로그인 없이 투표 링크 공유, GPS로 축제 도장 찍기</p></div></li>
+          <li><time datetime="2026-10-19">10.19</time><div><strong>축제 메뉴 · 인증 방식 변경 대응</strong><p>공공데이터로 축제 목록·지도·상세, 토큰 기반 본인 확인과 SNS 가입 대기 흐름</p></div></li>
+          <li><time datetime="2026-10-18">10.18</time><div><strong>성인 확인</strong><p>카메라로 신분증 촬영, 관리자 심사 화면</p></div></li>
+          <li><time datetime="2026-10-17">10.17</time><div><strong>AI 팁 · 로그인 확장</strong><p>화면 내용을 읽는 AI 팁, 전화번호 로그인·자동 로그인·비밀번호 찾기</p></div></li>
+          <li><time datetime="2026-10-15">10.15</time><div><strong>놀이 일지</strong><p>사진·별점·메모 기록 (10.26 지도 위치 추가)</p></div></li>
+          <li><time datetime="2026-10-13">10.13</time><div><strong>장소 추천 필터</strong><p>테마파크·공연·전시 등 분류, 큰 시설은 20km까지 검색</p></div></li>
+          <li><time datetime="2026-10-06">10.06</time><div><strong>구글 · 카카오 로그인</strong><p>Supabase OAuth로 SNS 로그인</p></div></li>
+          <li><time datetime="2026-09-28">09.28</time><div><strong>로그인 · 회원가입</strong><p>가입 화면과 로그인해야 들어가는 구조</p></div></li>
+          <li><time datetime="2026-09-17">09.17</time><div><strong>내 주변 놀거리</strong><p>네이버 지도 위에 주변 장소 표시</p></div></li>
+          <li><time datetime="2026-09-15">09.15</time><div><strong>첫 화면 · 디자인</strong><p>오늘의 재미 · 둘러보기 화면</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 03 ARCHITECTURE -->
+    <section class="case-section" id="architecture">
+      <div class="wrap">
+        <p class="section__eyebrow code">03 / Architecture</p>
+        <h2 class="section__title">구조 — 요청이 지나가는 길과 각자의 책임</h2>
+        <figure class="diagram card">
+          <svg viewBox="0 0 760 410" role="img" aria-label="앱과 웹은 AWS EC2의 nginx를 거쳐 같은 API를 부르고, API만 외부 서비스 키를 가진다">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0 0L10 5L0 10z" class="d-arrow" />
+              </marker>
+            </defs>
+            <g class="d-line" fill="none">
+              <path d="M224 160H262V100H300" marker-end="url(#arrow)" />
+              <path d="M224 290H262V112H300" marker-end="url(#arrow)" />
+              <path d="M384 136V176" marker-end="url(#arrow)" />
+              <path d="M468 235H502V64H536" marker-end="url(#arrow)" />
+              <path d="M468 235H502V122H536" marker-end="url(#arrow)" />
+              <path d="M468 235H502V180H536" marker-end="url(#arrow)" />
+              <path d="M468 235H502V238H536" marker-end="url(#arrow)" />
+              <path d="M468 235H502V296H536" marker-end="url(#arrow)" />
+              <path d="M468 235H502V354H536" marker-end="url(#arrow)" />
+            </g>
+            <text class="d-quiet" x="392" y="160">https</text>
+            <g>
+              <rect class="d-box d-box--main" x="24" y="104" width="200" height="112" rx="8" />
+              <text class="d-name" x="40" y="128">모바일 앱 (내 담당)</text>
+              <text class="d-text" x="40" y="148">.NET MAUI Blazor Hybrid</text>
+              <text class="d-quiet" x="40" y="166">GPS · 카메라 · 뒤로가기</text>
+              <text class="d-quiet" x="40" y="184">Release → 배포 서버</text>
+              <text class="d-quiet" x="40" y="202">Debug → 10.0.2.2:5199</text>
+            </g>
+            <g>
+              <rect class="d-box" x="24" y="250" width="200" height="80" rx="8" />
+              <text class="d-name" x="40" y="274">웹 (팀장 담당)</text>
+              <text class="d-text" x="40" y="294">Blazor Web App</text>
+              <text class="d-quiet" x="40" y="312">네이버 지도는 화면에서 직접</text>
+            </g>
+            <g text-anchor="middle">
+              <rect class="d-box" x="300" y="70" width="168" height="66" rx="8" />
+              <text class="d-name" x="384" y="96">AWS EC2</text>
+              <text class="d-quiet" x="384" y="116">nginx · Let's Encrypt</text>
+              <rect class="d-box" x="300" y="176" width="168" height="118" rx="8" />
+              <text class="d-name" x="384" y="200">JamBox.Api</text>
+              <text class="d-text" x="384" y="220">ASP.NET Core · Kestrel</text>
+              <text class="d-quiet" x="384" y="240">외부 키는 서버에만</text>
+              <text class="d-quiet" x="384" y="258">토큰으로 본인 확인</text>
+              <text class="d-quiet" x="384" y="276">/api/app-version (내가 추가)</text>
+            </g>
+            <g>
+              <rect class="d-box" x="536" y="40" width="200" height="48" rx="8" />
+              <text class="d-name" x="552" y="60">Supabase Auth</text>
+              <text class="d-quiet" x="552" y="78">이메일 · 구글 · 카카오 로그인</text>
+              <rect class="d-box" x="536" y="98" width="200" height="48" rx="8" />
+              <text class="d-name" x="552" y="118">RDS PostgreSQL</text>
+              <text class="d-quiet" x="552" y="136">일지 · 투표 · 도장 데이터</text>
+              <rect class="d-box" x="536" y="156" width="200" height="48" rx="8" />
+              <text class="d-name" x="552" y="176">Amazon S3</text>
+              <text class="d-quiet" x="552" y="194">사진(임시 주소로만 열람)</text>
+              <rect class="d-box" x="536" y="214" width="200" height="48" rx="8" />
+              <text class="d-name" x="552" y="234">카카오 로컬 API</text>
+              <text class="d-quiet" x="552" y="252">주변 장소 검색</text>
+              <rect class="d-box" x="536" y="272" width="200" height="48" rx="8" />
+              <text class="d-name" x="552" y="292">한국관광공사 TourAPI</text>
+              <text class="d-quiet" x="552" y="310">축제 정보(공공데이터)</text>
+              <rect class="d-box" x="536" y="330" width="200" height="48" rx="8" />
+              <text class="d-name" x="552" y="350">Amazon Bedrock</text>
+              <text class="d-quiet" x="552" y="368">AI 화면 팁</text>
+            </g>
+          </svg>
+          <figcaption>앱과 웹은 같은 API를 쓰고, 외부 서비스 키는 API 서버에만 둡니다. 서버 배포는 팀장이, 앱과 앱 버전 확인 API는 내가 맡았습니다.</figcaption>
+        </figure>
+
+        <h3 class="sub"><span class="code">3.1</span>요청 흐름 — 장소 추천</h3>
+        <ol class="flow">
+          <li>사용자가 앱에서 'PC방' 필터를 누르면, 앱이 기기 GPS로 현재 위치를 읽는다(지도에서 직접 정한 위치가 있으면 그것을 쓴다).</li>
+          <li>앱은 공용 API 클라이언트(JamBox.Shared)로 위치·분류·반경을 API에 보낸다.</li>
+          <li>API는 서버에만 있는 키로 카카오 로컬 API를 불러 주변 장소를 찾고, 거리순으로 돌려준다.</li>
+          <li>앱은 목록을 그리고, JS interop으로 네이버 지도에 번호 마커를 찍는다. 마커를 누르면 .NET으로 알려 목록의 그 장소로 스크롤한다.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 04 DATABASE -->
+    <section class="case-section" id="database">
+      <div class="wrap">
+        <p class="section__eyebrow code">04 / Database</p>
+        <h2 class="section__title">DB — 앱이 쓰는 테이블과 제약</h2>
+        <p class="section__lead">DB 설계는 팀장이 했고, 나는 앱에서 이 테이블들을 쓰는 화면을 만들었습니다. 테이블은 API가 처음 켜질 때 schema.sql로 자동 생성됩니다.</p>
+        <figure class="figure">
+          <img src="img/erd.png" alt="잼박스 ERD — places, place_saves, journal_entries, polls, poll_options, poll_votes, festival_stamps, adult_reviews, fun_items와 로그인 사용자" loading="lazy" />
+          <figcaption>잼박스 ERD (PostgreSQL, 테이블 9개 + Supabase 로그인 사용자)</figcaption>
+        </figure>
+        <div class="table-wrap" style="margin-top:20px">
+          <table class="table">
+            <thead><tr><th>제약</th><th>앱에서 어떻게 드러나는가</th></tr></thead>
+            <tbody>
+              <tr><td>poll_votes (poll_id, voter_hash) 기본 키</td><td>로그인 없이 투표해도 한 기기는 한 표만 — 앱은 기기마다 만든 투표자 키를 보관하고, 다시 투표하면 표가 바뀐다</td></tr>
+              <tr><td>festival_stamps (user_id, festival_id) 기본 키</td><td>한 축제에 도장은 한 번 — 이미 찍은 축제는 상세 화면에 '도장 찍음 · 날짜'로 보인다</td></tr>
+              <tr><td>poll_options → polls ON DELETE CASCADE</td><td>투표를 지우면 후보와 표도 함께 지워져, 앱 목록에 빈 후보가 남지 않는다</td></tr>
+              <tr><td>journal_entries rating 1~5, memo 500자 제한</td><td>앱 양식도 별점 5개·메모 글자 수(남은 글자 표시)로 같은 범위를 지켜, 서버 오류 전에 막는다</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 API -->
+    <section class="case-section" id="api">
+      <div class="wrap">
+        <p class="section__eyebrow code">05 / API Design</p>
+        <h2 class="section__title">API — 내가 추가한 계약과 앱의 호출 규칙</h2>
+        <div class="api">
+          <article class="card">
+            <h3><span class="method">GET</span><code>/api/app-version</code></h3>
+            <pre class="code-block">200 OK
+{
+  "latest": "0.9.2",
+  "downloadUrl": ""
+}</pre>
+            <ul>
+              <li>값은 서버 설정 <code>AppVersion:Latest</code>·<code>DownloadUrl</code>에서 읽는다 — 새 APK를 내면 앱 수정 없이 서버 값만 바꾼다.</li>
+              <li>앱은 켜질 때 한 번 부르고, 5초 안에 답이 없거나 실패하면 조용히 넘어간다(앱 사용을 막지 않음).</li>
+              <li>버전은 문자열이 아니라 숫자로 비교한다(0.9.2 &lt; 0.10.0).</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>로그인 토큰으로 본인 확인하는 호출</h3>
+            <pre class="code-block">GET /api/auth/me
+Authorization: Bearer &lt;access token&gt;
+
+200 → 내 계정 정보
+401 → 토큰 갱신 후 한 번 더
+      그래도 401이면 로그아웃</pre>
+            <ul>
+              <li>보안을 위해 '사용자 id를 보내 조회'하던 방식이 '토큰으로 본인 확인'으로 바뀌었고, 앱의 모든 본인 전용 호출을 한 함수로 감쌌다.</li>
+              <li>SNS로 처음 가입한 사람은 추가 정보를 입력할 때까지 로그인 상태로 두지 않는다(가입 대기).</li>
+            </ul>
+          </article>
+        </div>
+        <p class="note">API 전체 명세(인증·장소 추천·투표·도장 등)는 저장소 <code>docs/04-API명세서.md</code>에 있습니다. 서버 대부분은 팀장이 구현했습니다.</p>
+      </div>
+    </section>
+
+    <!-- 06 DECISIONS -->
+    <section class="case-section" id="decisions">
+      <div class="wrap">
+        <p class="section__eyebrow code">06 / Trade-off</p>
+        <h2 class="section__title">기술 결정 — 무엇을 왜 골랐나</h2>
+        <div class="decisions">
+          <article class="decision card">
+            <h3>안드로이드 뒤로가기: 펼친 것부터 닫고, 그다음 화면 이동</h3>
+            <dl>
+              <div><dt>상황</dt><dd>앱은 화면 전체가 WebView 하나라서, 기본 동작으로는 뒤로가기를 누르면 화면 이동 없이 앱이 바로 꺼졌다.</dd></div>
+              <div><dt>대안</dt><dd>① 브라우저 기록만 되돌리기 — 팁 카드·필터 창이 열려 있어도 화면이 넘어가 버림 ② 화면마다 따로 처리 — 중복이 많고 빠뜨리기 쉬움</dd></div>
+              <div><dt>선택</dt><dd>펼친 것(팁·필터·펼친 목록·팝업)이 스스로 '닫기'를 등록하고, 나중에 열린 것부터 닫는다. 닫을 게 없으면 탭 화면은 홈으로, 그 밖은 이전 화면으로. 홈에서는 두 번 눌러야 앱이 뒤로 간다.</dd></div>
+            </dl>
+          </article>
+          <article class="decision card">
+            <h3>업데이트 안내: 기준 버전을 서버 설정에 둔다</h3>
+            <dl>
+              <div><dt>상황</dt><dd>새 APK가 나와도 사용자가 알 방법이 없었다.</dd></div>
+              <div><dt>대안</dt><dd>GitHub Releases에서 최신 태그를 읽기 — 확인해 보니 저장소의 릴리스 API가 공개 응답을 주지 않아(404) 쓸 수 없었다.</dd></div>
+              <div><dt>선택</dt><dd>API에 버전 엔드포인트를 두고 서버 설정값을 돌려준다. 팀장이 배포할 때 값만 바꾸면 되고, 서버가 꺼져 있어도 앱은 평소처럼 동작한다.</dd></div>
+            </dl>
+          </article>
+          <article class="decision card">
+            <h3>화면 팁: 자동 팝업 → 하루 숨기기 → 눌러야 열림</h3>
+            <dl>
+              <div><dt>상황</dt><dd>화면을 옮길 때마다 AI 팁이 저절로 떠서 직접 써 보니 거슬렸다.</dd></div>
+              <div><dt>1차</dt><dd>'하루 동안 보지 않기' 체크박스를 추가(10.20).</dd></div>
+              <div><dt>2차</dt><dd>팀원 의견으로 저절로 뜨는 것 자체를 없애고 전구 버튼을 눌렀을 때만 그 화면 팁을 불러오게 했다(11.16). 필요 없어진 체크박스는 지웠다.</dd></div>
+            </dl>
+          </article>
+          <article class="decision card">
+            <h3>SNS 로그인: 카카오는 앱 안 WebView, 구글은 시스템 브라우저</h3>
+            <dl>
+              <div><dt>상황</dt><dd>같은 방식으로는 구글 로그인 페이지가 열리지 않았다(구글은 앱 내장 WebView 로그인을 정책상 막는다).</dd></div>
+              <div><dt>선택</dt><dd>구글만 휴대폰 기본 브라우저(WebAuthenticator)로 열고, 끝나면 <code>jambox://auth-callback</code> 주소로 앱에 돌아오게 했다.</dd></div>
+            </dl>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 TROUBLESHOOTING -->
+    <section class="case-section" id="troubleshooting">
+      <div class="wrap">
+        <p class="section__eyebrow code">07 / Troubleshooting</p>
+        <h2 class="section__title">트러블슈팅 — 해결이 아니라 검증까지</h2>
+        <p class="section__lead">모든 사례를 증상 → 원인 → 결정 → 검증 순서로 적었습니다. 검증하지 못한 것은 못 했다고 적었습니다.</p>
+        <div class="tsg">
+          <article class="card">
+            <h3>Windows 앱에서 버전이 '1.0.0.1'로 표시됨</h3>
+            <dl class="tsg__steps">
+              <div><dt>SYMPTOM</dt><dd>앱 버전을 0.9.x로 올렸는데 마이 화면에는 1.0.0.1이 나왔다.</dd></div>
+              <div><dt>CAUSE</dt><dd>Windows 앱을 패키지 없이 실행하면 앱 정보가 매니페스트 기본값을 읽는다. Android는 정상.</dd></div>
+              <div><dt>DECISION</dt><dd>Windows에서만 프로젝트 버전이 들어가는 어셈블리 버전을 읽도록 분기.</dd></div>
+              <div><dt>VALIDATION</dt><dd>원격 디버깅으로 마이 화면 문구를 읽어 '앱 버전 0.9.1' 확인, APK도 versionName 0.9.2 확인(aapt).</dd></div>
+            </dl>
+          </article>
+          <article class="card">
+            <h3>안드로이드에서 뒤로가기를 누르면 앱이 꺼짐</h3>
+            <dl class="tsg__steps">
+              <div><dt>SYMPTOM</dt><dd>팀원 제보 — 어느 화면에서든 뒤로가기 한 번에 앱이 종료.</dd></div>
+              <div><dt>CAUSE</dt><dd>MAUI 기본 동작이 WebView 안의 화면 기록을 모른 채 앱을 닫는다.</dd></div>
+              <div><dt>DECISION</dt><dd>뒤로가기를 앱 화면에 넘기는 처리기 추가(06 기술 결정 참고). 일지 작성 중엔 입력을 지키려고 화면을 벗어나지 않는다.</dd></div>
+              <div><dt>VALIDATION</dt><dd>Android 빌드 경고·오류 0. <b>실제 휴대폰 확인은 아직</b> — 이 PC의 에뮬레이터가 켜지지 않아 실제 기기 확인이 남아 있다.</dd></div>
+            </dl>
+          </article>
+          <article class="card">
+            <h3>팀장 브랜치를 병합하자 앱 빌드가 깨짐</h3>
+            <dl class="tsg__steps">
+              <div><dt>SYMPTOM</dt><dd>공용 인증 클라이언트의 메서드가 사라져 앱이 컴파일되지 않았다.</dd></div>
+              <div><dt>CAUSE</dt><dd>보안 강화로 내 정보 조회가 토큰 기반으로 바뀌고 반환 형식도 달라졌다.</dd></div>
+              <div><dt>DECISION</dt><dd>모든 호출 부분을 토큰 방식으로 바꾸고, SNS 가입 대기·중복 가입 안내를 추가.</dd></div>
+              <div><dt>VALIDATION</dt><dd>앱 빌드 통과 확인. 이후 '병합 직후 앱 빌드'를 내 작업 규칙으로 삼았다.</dd></div>
+            </dl>
+          </article>
+          <article class="card">
+            <h3>지도에 추천 장소가 아무것도 안 보임</h3>
+            <dl class="tsg__steps">
+              <div><dt>SYMPTOM</dt><dd>장소 추천 화면의 지도와 목록이 비어 있었다.</dd></div>
+              <div><dt>CAUSE</dt><dd>네이버 지도는 등록한 주소에서만 인증된다. 웹이 등록하지 않은 포트(5288)로 실행돼 인증 실패.</dd></div>
+              <div><dt>DECISION</dt><dd>웹을 등록 주소의 포트 5080으로 실행. 앱은 WebView 주소(https://0.0.0.0·0.0.0.1)가 서비스 URL에 등록돼 있는지 확인.</dd></div>
+              <div><dt>VALIDATION</dt><dd>지도와 장소 목록 표시 확인. 팀장이 5080을 웹 기본 설정으로 반영했다.</dd></div>
+            </dl>
+          </article>
+          <article class="card">
+            <h3>로그인과 모든 데이터 기능이 한꺼번에 멈춤</h3>
+            <dl class="tsg__steps">
+              <div><dt>SYMPTOM</dt><dd>로그인·일지·투표가 모두 실패. 코드는 바뀐 게 없었다.</dd></div>
+              <div><dt>CAUSE</dt><dd>DNS 조회 결과 Supabase 프로젝트 주소가 '존재하지 않음' — 무료 플랜 프로젝트가 일시 정지됐다.</dd></div>
+              <div><dt>DECISION</dt><dd>코드를 고치지 않고 팀장에게 프로젝트 복구를 요청.</dd></div>
+              <div><dt>VALIDATION</dt><dd>복구 후 API를 하나씩 호출 — 장소·축제 200, 틀린 비밀번호 401로 정상 동작 확인.</dd></div>
+            </dl>
+          </article>
+          <article class="card">
+            <h3>학교 AWS 계정에서 접근 키를 만들 수 없음</h3>
+            <dl class="tsg__steps">
+              <div><dt>SYMPTOM</dt><dd>사진을 S3에 올리려면 IAM 접근 키가 필요한데, 학교 계정은 발급·IAM 사용자 생성이 막혀 있었다.</dd></div>
+              <div><dt>CAUSE</dt><dd>미리 정해 둔 IAM 역할만 쓰도록 제한된 계정 정책.</dd></div>
+              <div><dt>DECISION</dt><dd>코드를 확인해 키를 비우면 서버의 IAM 역할로 S3에 접근함을 이용 — EC2에는 인스턴스 프로필, 개발 PC는 DB만 RDS.</dd></div>
+              <div><dt>VALIDATION</dt><dd>설정 순서를 팀 문서(docs/09-2)로 남겨 main에 반영. 이후 팀은 AWS(EC2·RDS·S3)로 배포를 마쳤다.</dd></div>
+            </dl>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 TEST & DEPLOY -->
+    <section class="case-section" id="deploy">
+      <div class="wrap">
+        <p class="section__eyebrow code">08 / Test · Deploy</p>
+        <h2 class="section__title">테스트와 배포 — 내가 실제로 확인한 방법</h2>
+        <ol class="pipeline">
+          <li><b>Branch</b><span>내 브랜치에서 작업, 팀장 브랜치 먼저 병합</span></li>
+          <li><b>Build</b><span>Windows·Android 둘 다 빌드, 경고·오류 0 확인</span></li>
+          <li><b>Check</b><span>Windows 앱을 원격 디버깅으로 휴대폰 크기(390×844)로 띄워 화면 조작·캡처</span></li>
+          <li><b>Release</b><span>서명된 Release APK·AAB 빌드, 앱 이름·버전 확인(aapt)</span></li>
+          <li><b>Share</b><span>배포 폴더 교체·커밋, PR로 main 반영 → 팀장 릴리스</span></li>
+        </ol>
+        <div class="shot-pair" style="margin-top:28px">
+          <img src="img/screens/update-popup.jpg" alt="업데이트 안내 팝업 — 새 버전이 나왔어요, 현재 0.9.1 → 최신 0.9.2, 나중에 · 업데이트 버튼" loading="lazy" />
+          <div class="prose">
+            <p><b>업데이트 팝업 검증</b> — 로컬 API를 최신 버전 0.9.2로 설정해 켜고, 0.9.1 앱을 실행해 팝업이 뜨는지, '나중에'로 닫히는지 확인했습니다.</p>
+            <p>같은 방법으로 팁이 저절로 뜨지 않는 것, 마이 화면 버전 표시, 목록을 끌어 올리고 내리는 동작(320px 끌기 → 펼침, 20px → 그대로)을 확인했습니다.</p>
+          </div>
+        </div>
+        <p class="note">자동 테스트와 CI는 아직 없습니다. 검증은 위처럼 직접 조작해 확인한 범위입니다. 측정한 성능 수치도 없어 적지 않았습니다.</p>
+      </div>
+    </section>
+
+    <!-- 09 RETROSPECTIVE -->
+    <section class="case-section" id="retro">
+      <div class="wrap">
+        <p class="section__eyebrow code">09 / Retrospective</p>
+        <h2 class="section__title">회고 — 한계와 다음 개선</h2>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>한계</th><th>다음에 할 일</th></tr></thead>
+            <tbody>
+              <tr><td>뒤로가기를 실제 휴대폰에서 확인하지 못함</td><td>실제 기기에서 홈·장소 추천·일지 화면 뒤로가기 점검</td></tr>
+              <tr><td>자동 테스트·CI 없음 — 공용 코드 변경을 병합 뒤에야 발견</td><td>PR마다 웹·앱 자동 빌드, 버전 비교·뒤로가기 순서 같은 로직에 단위 테스트</td></tr>
+              <tr><td>웹 화면을 앱에 따로 옮겨 같은 작업을 두 번 함</td><td>공용 Razor 컴포넌트로 화면까지 더 공유</td></tr>
+              <tr><td>업데이트 버튼이 열 설치 파일 주소가 아직 없음</td><td>서버 설정에 APK 주소를 넣어 버튼 한 번으로 내려받게</td></tr>
+              <tr><td>개인화 추천·재미 도감은 준비 중 화면</td><td>일지 별점·찜·투표 결과로 취향 반영</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="project__links" style="margin-top:32px">
+          <a class="btn btn--primary" href="index.html#projects">프로젝트 목록으로</a>
+          <a class="btn" href="https://github.com/MoonHakCheol/Neuromin-Jambox" target="_blank" rel="noopener">GitHub 저장소</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="contact">
+    <div class="wrap">
+      <p class="section__eyebrow code">Contact</p>
+      <h2 class="footer__title">연락처</h2>
+      <ul class="contact">
+        <li><span>이메일</span><a href="mailto:lonskim9504@gmail.com">lonskim9504@gmail.com</a></li>
+        <li><span>GitHub</span><a href="https://github.com/sungjinkim9504" target="_blank" rel="noopener">github.com/sungjinkim9504</a></li>
+      </ul>
+      <p class="footer__note code">© 2026 Kim Sung Jin</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
